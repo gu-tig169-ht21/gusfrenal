@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'model.dart';
 
 class EditTodoView extends StatefulWidget {
-  final Todo todo;
+  final TodoModel todo;
 
-  EditTodoView(this.todo);
+  const EditTodoView(this.todo);
 
   @override
   State<StatefulWidget> createState() {
@@ -13,18 +14,18 @@ class EditTodoView extends StatefulWidget {
 }
 
 class EditTodoViewState extends State<EditTodoView> {
-  late String todoText; 
+  late String title;
 
   late TextEditingController textEditingController;
 
-  EditTodoViewState(Todo todo) {
-    this.todoText = todo.todoText;
+  EditTodoViewState(TodoModel todo) {
+    this.title = todo.title;
 
-    textEditingController = TextEditingController(text: todo.todoText);
+    textEditingController = TextEditingController(text: todo.title);
 
     textEditingController.addListener(() {
       setState(() {
-        todoText = textEditingController.text;
+        title = textEditingController.text;
       });
     });
   }
@@ -70,7 +71,7 @@ class EditTodoViewState extends State<EditTodoView> {
       children: [
         TextButton.icon(
           onPressed: () {
-            Navigator.pop(context, Todo(todoText: todoText));
+            Navigator.pop(context, TodoModel(title: title, id: ''));
           },
           icon: Icon(Icons.add),
           label: Text(

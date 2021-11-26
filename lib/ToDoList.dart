@@ -1,48 +1,39 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'model.dart';
 
-class TodoList extends StatefulWidget {
-  final List<Todo> list;
+class TodoList extends StatelessWidget {
+  final List<TodoModel> list;
 
   TodoList(this.list);
 
-  @override
-  _TodoListState createState() => _TodoListState();
-}
-
-class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: widget.list.length,
-        itemBuilder: (context, index) => _todoItem(widget.list[index]));
+        itemCount: list.length,
+        itemBuilder: (context, index) => _todoItem(context, list[index]));
   }
 
   Widget _todoItem(
-    Todo todo,
+    context,
+    TodoModel todo,
   ) {
     return CheckboxListTile(
       controlAffinity: ListTileControlAffinity.leading,
-      title: Text(todo.todoText,
+      title: Text(todo.title,
           style: TextStyle(
-              decoration: (todo.completed
+              decoration: (todo.done
                   ? TextDecoration.lineThrough
-                  : TextDecoration.none)
-                  
-                  )
-                  ),
-
-      value: todo.completed,
+                  : TextDecoration.none))),
+      value: todo.done,
       onChanged: (bool? value) {
         var state = Provider.of<MyState>(context, listen: false);
-        state.setCompletedTodo(todo, value!);
+        state.setDoneTodoModel(todo, value!);
       },
       secondary: IconButton(
         icon: Icon(Icons.delete),
         onPressed: () {
           var state = Provider.of<MyState>(context, listen: false);
-          state.removeTodo(todo);
+          state.removeTodoModel(todo /* state.list[index] */);
         },
       ),
     );

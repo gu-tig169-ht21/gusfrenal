@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'ToDoListView.dart';
 import 'model.dart';
+import 'TodoListView.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   var state = MyState();
+  state.getTodoModel();
 
   runApp(
     ChangeNotifierProvider(
