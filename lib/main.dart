@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'model.dart';
-import 'TodoListView.dart';
+import 'ToDoListView.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -10,12 +10,14 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => state,
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TodoListView(),
+      home: const TodoListView(),
     );
   }
 }

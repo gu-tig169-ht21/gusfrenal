@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:async';
-
 import 'Api.dart';
+
 
 TodoModel todoModelFromJson(String str) => TodoModel.fromJson(json.decode(str));
 
@@ -34,13 +35,15 @@ class TodoModel {
 class MyState extends ChangeNotifier {
   List<TodoModel> _list = [];
   List<TodoModel> get list => _list;
-
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
   String _filterValue = 'All';
   String get filterValue => _filterValue;
 
   Future getTodoModel() async {
+    isLoading.value = true;
     List<TodoModel> list = await Api.getTodoModel();
     _list = list;
+    isLoading.value = false;
     notifyListeners();
   }
 
@@ -61,8 +64,8 @@ class MyState extends ChangeNotifier {
     await getTodoModel();
   }
 
-  void filterTodoModel(String filterValue, String s) {
-    this._filterValue = filterValue;
+  void filterTodoModel(String filterValue) {
+    _filterValue = filterValue;
     notifyListeners();
   }
 }

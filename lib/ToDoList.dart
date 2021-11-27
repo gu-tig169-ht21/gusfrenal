@@ -5,8 +5,9 @@ import 'model.dart';
 class TodoList extends StatelessWidget {
   final List<TodoModel> list;
 
-  TodoList(this.list);
+  const TodoList(this.list, {Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: list.length,
@@ -30,7 +31,7 @@ class TodoList extends StatelessWidget {
         state.setDoneTodoModel(todo, value!);
       },
       secondary: IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: () {
           var state = Provider.of<MyState>(context, listen: false);
           state.removeTodoModel(todo /* state.list[index] */);
