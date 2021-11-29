@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'EditToDoView.dart';
-import 'ToDoList.dart';
+import 'edit_to_do_view.dart';
+import 'to_do_list.dart';
 import 'model.dart';
 
 class TodoListView extends StatefulWidget {
