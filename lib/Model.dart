@@ -1,41 +1,71 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'api.dart';
 
-class Todo {
-  String todoText;
-  bool completed;
 
-  Todo({required this.todoText, this.completed = false});
+TodoModel todoModelFromJson(String str) => TodoModel.fromJson(json.decode(str));
+
+String todoModelToJson(TodoModel data) => json.encode(data.toJson());
+
+class TodoModel {
+  TodoModel({
+    required this.id,
+    required this.title,
+    this.done = false,
+  });
+
+  String id;
+  String title;
+  bool done;
+
+  factory TodoModel.fromJson(Map<String, dynamic> json) => TodoModel(
+        id: json["id"],
+        title: json["title"],
+        done: json["done"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "done": done,
+      };
 }
 
 class MyState extends ChangeNotifier {
-  //flitered _list
-  //kolla vilka filter som är aktiva
-  List<Todo> _list = [];
+  List<TodoModel> _list = [];
+  List<TodoModel> get list => _list;
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
+  String _filterValue = 'All';
+  String get filterValue => _filterValue;
 
-  List<Todo> get list => _list;
+  Future getTodoModel() async {
+    isLoading.value = true;
+    List<TodoModel> list = await Api.getTodoModel();
+    _list = list;
+    isLoading.value = false;
+    notifyListeners();
+  }
 
-  void addTodo(Todo todo) {
+  void addTodoModel(TodoModel todo) async {
     _list.add(todo);
-    notifyListeners();
+    await Api.addTodoModel(todo);
+    await getTodoModel();
   }
 
-  void setCompletedTodo(Todo todo, bool completed) {
-    var index = _list.indexWhere((listTodo) => listTodo == todo);
-    _list[index].completed = completed;
-    notifyListeners();
+  void setDoneTodoModel(TodoModel todo, bool done) async {
+    todo.done = done;
+    await Api.updateTodo(todo, todo.id);
+    await getTodoModel();
   }
 
-  void removeTodo(Todo todo) {
-    _list.remove(todo);
-    notifyListeners();
+  void removeTodoModel(TodoModel todo) async {
+    await Api.removeTodoModel(todo.id);
+    await getTodoModel();
   }
 
-  List<Todo> filter(String filterAlternatives) {
-    if (filterAlternatives == "Klara") {
-      return _list.where((todo) => todo.completed == true).toList();
-    } else if (filterAlternatives == "Ej klara") {
-      return _list.where((todo) => todo.completed == false).toList();
-    }
-    return _list;
+  void filterTodoModel(String filterValue) {
+    _filterValue = filterValue;
+    notifyListeners();
   }
 }

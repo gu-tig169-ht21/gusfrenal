@@ -1,40 +1,31 @@
 import 'package:flutter/material.dart';
+
 import 'model.dart';
 
 class EditTodoView extends StatefulWidget {
-  final Todo todo;
+  final TodoModel todo;
 
-  EditTodoView(this.todo);
+  const EditTodoView(this.todo, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return EditTodoViewState(todo);
-  }
+  State<StatefulWidget> createState() => EditTodoViewState();
 }
 
 class EditTodoViewState extends State<EditTodoView> {
-  late String todoText; 
-
   late TextEditingController textEditingController;
-
-  EditTodoViewState(Todo todo) {
-    this.todoText = todo.todoText;
-
-    textEditingController = TextEditingController(text: todo.todoText);
-
-    textEditingController.addListener(() {
-      setState(() {
-        todoText = textEditingController.text;
-      });
-    });
+  @override
+  void initState() {
+    super.initState();
+    textEditingController = TextEditingController();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Skapa en Todo",
           style: TextStyle(color: Colors.black),
         ),
@@ -52,13 +43,13 @@ class EditTodoViewState extends State<EditTodoView> {
 
   Widget textField() {
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: TextField(
         controller: textEditingController,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Vad vill du lägga till?',
-          enabledBorder: const OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black, width: 2),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 2),
           ),
         ),
       ),
@@ -70,10 +61,11 @@ class EditTodoViewState extends State<EditTodoView> {
       children: [
         TextButton.icon(
           onPressed: () {
-            Navigator.pop(context, Todo(todoText: todoText));
+            Navigator.pop(
+                context, TodoModel(title: textEditingController.text, id: ''));
           },
-          icon: Icon(Icons.add),
-          label: Text(
+          icon: const Icon(Icons.add),
+          label: const Text(
             'Lägg till',
             style: TextStyle(fontSize: 16),
           ),
